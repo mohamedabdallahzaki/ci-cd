@@ -32,4 +32,4 @@ COPY --from=build /app/publish .
 EXPOSE 8080
 
 # Start application
-ENTRYPOINT ["dotnet", "YourProject.dll"]
+ENTRYPOINT ["dotnet", "ci-cd.csproj"]
