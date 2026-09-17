@@ -5,17 +5,20 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 WORKDIR /src
 
-# Copy project file
-COPY *.csproj ./
+# Copy application project
+COPY ci-cd.csproj ./
 
-# Restore dependencies
-RUN dotnet restore
+# Restore application dependencies
+RUN dotnet restore ci-cd.csproj
 
 # Copy source code
 COPY . .
 
-# Build and publish
-RUN dotnet publish -c Release -o /app/publish --no-restore
+# Publish application
+RUN dotnet publish ci-cd.csproj \
+    -c Release \
+    -o /app/publish \
+    --no-restore
 
 
 # =========================
@@ -28,8 +31,7 @@ WORKDIR /app
 # Copy published application
 COPY --from=build /app/publish .
 
-# Application port
 EXPOSE 8080
 
 # Start application
-ENTRYPOINT ["dotnet", "ci-cd.csproj"]
+ENTRYPOINT ["dotnet", "ci-cd.dll"]
